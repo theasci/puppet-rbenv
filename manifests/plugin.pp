@@ -34,18 +34,7 @@ define rbenv::plugin(
     creates => $destination,
     path    => ['/bin', '/usr/bin', '/usr/sbin'],
     timeout => $timeout,
-    cwd     => $home_path,
+    cwd => $home_path,
     require => File["rbenv::plugins ${user}"],
   }
-
-  exec { "rbenv::plugin::update ${user} ${plugin_name}":
-    command => 'git pull',
-    user    => $user,
-    group   => $group,
-    path    => ['/bin', '/usr/bin', '/usr/sbin'],
-    timeout => $timeout,
-    cwd     => $destination,
-    require => Exec["rbenv::plugin::checkout ${user} ${plugin_name}"],
-  }
-
 }
