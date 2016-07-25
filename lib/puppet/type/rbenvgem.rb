@@ -35,8 +35,8 @@ Puppet::Type.newtype(:rbenvgem) do
       case requested
         when :present, :installed
           current != :absent
-				when :latest
-					versions.include?(provider.latest)
+        when :latest
+          versions.include?(provider.latest)
         when :absent
           current == :absent
         when /^['"]([^\s])\s([\d\.]+)['"]$/ # e.g. "'< 2.0'", "'>= 0.4.3'"
