@@ -194,6 +194,10 @@ Specifically, `pluginsync` must be enabled in puppet.conf configuration file on 
 pluginsync = true
 ```
 
+## Testing
+
+You can use the Puppet logger to output information within the `Puppet::Type` definitions. For example: `Puppet.info("message here")`.
+
 ## Supported Platforms
 
 * CentOS
