@@ -196,7 +196,7 @@ pluginsync = true
 
 ## Testing
 
-You can use the Puppet logger to output information within the `Puppet::Type` definitions. For example: `Puppet.info("current = #{current}, provider.current = #{provider.current}, requested = #{requested}, provider.latest = #{provider.latest}, self = #{self}, @should = #{@should}")`.
+You can use the Puppet logger to output information within the `Puppet::Type` definitions. For example: `Puppet.info("message here")`.
 
 ## Supported Platforms
 
