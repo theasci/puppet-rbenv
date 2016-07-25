@@ -28,18 +28,18 @@ Puppet::Type.type(:rbenvgem).provide :default do
   def versions(where = :local)
     args = ['list', where == :remote ? '--remote' : '--local', "^#{gem_name}$"]
 
-		versions = []
-		gem(*args).lines.map do |line|
-			matches = line.match(/^(?:\S+)\s+\((.+)\)/)
-			next unless matches
-	    versions += matches[1].split(/,\s*/)
-		end
-		versions.uniq
-	end
+    versions = []
+    gem(*args).lines.map do |line|
+      matches = line.match(/^(?:\S+)\s+\((.+)\)/)
+      next unless matches
+      versions += matches[1].split(/,\s*/)
+    end
+    versions.uniq
+  end
 
-	def gem_name
-		resource[:gemname]
-	end
+  def gem_name
+    resource[:gemname]
+  end
 
   private
     # Executes a gem command
