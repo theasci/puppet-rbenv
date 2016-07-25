@@ -17,34 +17,42 @@ Puppet::Type.type(:rbenvgem).provide :default do
   end
 
   def latest
-    @latest ||= list(:remote)
+    @latest ||= latest_version(:remote)
   end
 
   def current
-    list
+    latest_version
   end
 
-  private
-    def gem_name
-      resource[:gemname]
-    end
+  # Returns an array of versions for gem_name
+  def versions(where = :local)
+    args = ['list', where == :remote ? '--remote' : '--local', "^#{gem_name}$"]
 
+		versions = []
+		gem(*args).lines.map do |line|
+			matches = line.match(/^(?:\S+)\s+\((.+)\)/)
+			next unless matches
+	    versions += matches[1].split(/,\s*/)
+		end
+		versions.uniq
+	end
+
+	def gem_name
+		resource[:gemname]
+	end
+
+  private
+    # Executes a gem command
     def gem(*args)
       exe =  "RBENV_VERSION=#{resource[:ruby]} " + resource[:rbenv] + '/bin/gem'
       su('-', resource[:user], '-c', [exe, *args].join(' '))
     end
 
-    def list(where = :local)
-      args = ['list', where == :remote ? '--remote' : '--local', "#{gem_name}$"]
+    # Returns the highest version installed
+    def latest_version(where = :local)
+      all_versions = versions(where)
+      return nil if all_versions.empty?
 
-      gem(*args).lines.map do |line|
-        line =~ /^(?:\S+)\s+\((.+)\)/
-
-        return nil unless $1
-
-        # Fetch the version number
-        ver = $1.split(/,\s*/)
-        ver.empty? ? nil : ver
-      end.first
+      all_versions.sort.reverse.first
     end
 end
